@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.5",
+	"Category": "Games",
+	"Description": "3rd person multiplayer action-adventure game with SpaceTimeDB backend",
+	"Modules": [
+		{
+			"Name": "Eon",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "WebSocketsLibrary",
+			"Enabled": true
+		}
+	]
+}
