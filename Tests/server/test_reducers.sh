@@ -145,6 +145,31 @@ main() {
     run_test "query item_definition table" \
         "spacetime sql --local $TEST_DB 'SELECT * FROM item_definition'"
 
+    # Test 6: Test inventory operations
+    run_test "spawn_world_item" \
+        "spacetime call --local $TEST_DB spawn_world_item 1 1 0.0 0.0 0.0"
+
+    run_test "query world_item table" \
+        "spacetime sql --local $TEST_DB 'SELECT * FROM world_item'"
+
+    # Test 7: Test instance state changes
+    run_test "start_game (no instance)" \
+        "spacetime call --local $TEST_DB start_game 999999" \
+        "false"
+
+    # Test 8: Test player name validation
+    run_test "set_player_name (empty)" \
+        "spacetime call --local $TEST_DB set_player_name ''" \
+        "false"
+
+    # Test 9: Query player table (should be empty without connections)
+    run_test "query player table" \
+        "spacetime sql --local $TEST_DB 'SELECT * FROM player'"
+
+    # Test 10: Query inventory_item table (should be empty)
+    run_test "query inventory_item table" \
+        "spacetime sql --local $TEST_DB 'SELECT * FROM inventory_item'"
+
     # Print summary
     echo ""
     echo "============================================"

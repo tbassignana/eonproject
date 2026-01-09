@@ -38,15 +38,31 @@ eonproject/
 │       └── src/
 │           └── lib.rs     # Database schema & reducers
 ├── Client/                 # Unreal Engine 5.5.4 client
-│   ├── Source/            # C++ source code
+│   ├── Source/Eon/        # C++ source code
+│   │   ├── Public/        # Header files
+│   │   │   ├── UI/        # Widget classes
+│   │   │   └── Interactables/
+│   │   └── Private/       # Implementation files
 │   ├── Config/            # UE configuration files
 │   └── Content/           # Game assets
 ├── Tests/                  # Test suites
-├── Documentation/          # Project documentation
-├── Scripts/                # Build and deployment scripts
+│   └── server/            # SpaceTimeDB integration tests
 ├── TODO.md                 # Development tracker
+├── LOG.md                  # Session logs
 └── README.md              # This file
 ```
+
+### Key Client Components
+
+| Component | Description |
+|-----------|-------------|
+| `AEonCharacter` | Third-person player character |
+| `AEonPlayerController` | Input handling and camera |
+| `USpaceTimeDBManager` | WebSocket connection to backend |
+| `UPlayerSyncComponent` | Multiplayer position interpolation |
+| `UInventoryComponent` | Player inventory management |
+| `UInteractionComponent` | World object interaction |
+| `AEonHUD` | Main HUD and UI state management |
 
 ## Prerequisites
 
@@ -147,7 +163,16 @@ spacetime call --local eonserver init_item_definitions
 ### Running Tests
 
 ```bash
-# Server-side tests
+# Run SpaceTimeDB reducer integration tests
+./Tests/server/test_reducers.sh
+
+# This will:
+# 1. Build the eonserver module
+# 2. Start a local SpaceTimeDB instance
+# 3. Publish and test all reducers
+# 4. Clean up test database
+
+# Server-side unit tests (Rust)
 cd Server/eonserver
 cargo test
 ```

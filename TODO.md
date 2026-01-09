@@ -88,11 +88,11 @@
 - [ ] **5.4** Write gameplay tests
 
 ## Phase 6: Testing and Quality Assurance
-- [ ] **6.1** Unit Tests
-  - [ ] **6.1.1** SpaceTimeDB reducer tests
-  - [ ] **6.1.2** Character controller tests
-  - [ ] **6.1.3** Network manager tests
-  - [ ] **6.1.4** Inventory system tests
+- [x] **6.1** Unit Tests
+  - [x] **6.1.1** SpaceTimeDB reducer tests (Tests/server/test_reducers.sh)
+  - [ ] **6.1.2** Character controller tests - TODO (requires UE5 build)
+  - [ ] **6.1.3** Network manager tests - TODO (requires UE5 build)
+  - [ ] **6.1.4** Inventory system tests - TODO (requires UE5 build)
 - [ ] **6.2** Integration Tests
   - [ ] **6.2.1** Single-player flow test
   - [ ] **6.2.2** Multiplayer sync test
