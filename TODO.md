@@ -9,10 +9,10 @@
 - [x] **0.5** Create project directory structure
 
 ## Phase 1: Project Foundation
-- [ ] **1.1** Create Unreal Engine 5.5.4 C++ project structure (no Blueprints)
+- [x] **1.1** Create Unreal Engine 5.5.4 C++ project structure (no Blueprints)
 - [x] **1.2** Set up `.gitignore` for UE5 and SpaceTimeDB artifacts
 - [x] **1.3** Create README.md with project overview and setup instructions
-- [ ] **1.4** Set up build configuration (CMakeLists or UE Build.cs files)
+- [x] **1.4** Set up build configuration (Eon.Build.cs, Target.cs files)
 
 ## Phase 2: SpaceTimeDB Backend Module
 - [x] **2.1** Initialize SpaceTimeDB module (`spacetime init`)
@@ -38,27 +38,27 @@
 - [ ] **2.6** Deploy SpaceTimeDB module to cloud (requires login)
 
 ## Phase 3: Unreal Engine Core Systems (C++ Only)
-- [ ] **3.1** Create Game Module structure
-  - [ ] **3.1.1** EonCore module (game logic)
-  - [ ] **3.1.2** EonNetwork module (SpaceTimeDB integration)
-  - [ ] **3.1.3** EonUI module (HUD, menus)
-- [ ] **3.2** Implement Third Person Character Controller
-  - [ ] **3.2.1** `AEonCharacter` class with movement, jumping
-  - [ ] **3.2.2** `AEonPlayerController` for input handling
-  - [ ] **3.2.3** Third-person camera system (`UEonCameraComponent`)
-  - [ ] **3.2.4** Animation state machine integration (C++ driven)
-- [ ] **3.3** Implement SpaceTimeDB Client Integration
-  - [ ] **3.3.1** WebSocket connection manager
-  - [ ] **3.3.2** JSON serialization for SpaceTimeDB protocol
-  - [ ] **3.3.3** Subscription handling for real-time updates
-  - [ ] **3.3.4** Reducer call wrapper functions
+- [x] **3.1** Create Game Module structure
+  - [x] **3.1.1** Eon module (game logic, Build.cs)
+  - [x] **3.1.2** SpaceTimeDBManager subsystem (network integration)
+  - [ ] **3.1.3** EonUI module (HUD, menus) - TODO
+- [x] **3.2** Implement Third Person Character Controller
+  - [x] **3.2.1** `AEonCharacter` class with movement, jumping
+  - [x] **3.2.2** `AEonPlayerController` for input handling
+  - [x] **3.2.3** Third-person camera system (SpringArm + Camera)
+  - [ ] **3.2.4** Animation state machine integration (C++ driven) - TODO
+- [x] **3.3** Implement SpaceTimeDB Client Integration
+  - [x] **3.3.1** WebSocket connection manager (USpaceTimeDBManager)
+  - [x] **3.3.2** JSON serialization for SpaceTimeDB protocol
+  - [x] **3.3.3** Subscription handling for real-time updates (partial)
+  - [x] **3.3.4** Reducer call wrapper functions
 - [ ] **3.4** Write tests for character controller
 
 ## Phase 4: Networking and Multiplayer
-- [ ] **4.1** Implement Network Manager
-  - [ ] **4.1.1** Connection state machine (connecting, connected, disconnected)
-  - [ ] **4.1.2** Reconnection logic with exponential backoff
-  - [ ] **4.1.3** Message queue for offline buffering
+- [x] **4.1** Implement Network Manager (USpaceTimeDBManager)
+  - [x] **4.1.1** Connection state machine (connecting, connected, disconnected)
+  - [ ] **4.1.2** Reconnection logic with exponential backoff - TODO
+  - [ ] **4.1.3** Message queue for offline buffering - TODO
 - [ ] **4.2** Implement Player Synchronization
   - [ ] **4.2.1** Position interpolation for smooth movement
   - [ ] **4.2.2** Client-side prediction
@@ -70,10 +70,10 @@
 - [ ] **4.4** Write integration tests for multiplayer sync
 
 ## Phase 5: Gameplay Features
-- [ ] **5.1** Implement Combat System
-  - [ ] **5.1.1** Basic melee attack
-  - [ ] **5.1.2** Health and damage system
-  - [ ] **5.1.3** Combat state replication
+- [x] **5.1** Implement Combat System (basic)
+  - [x] **5.1.1** Basic melee attack (sphere trace)
+  - [x] **5.1.2** Health and damage system
+  - [ ] **5.1.3** Combat state replication - TODO
 - [ ] **5.2** Implement Inventory System
   - [ ] **5.2.1** `UInventoryComponent` for players
   - [ ] **5.2.2** Item pickup actors
@@ -121,9 +121,9 @@
 ---
 
 ## Current Status
-**Current Task**: Phase 2.5 - Write unit tests for SpaceTimeDB reducers
+**Current Task**: Phase 3.2.4 - Continue implementing UE5 client features
 **Blockers**: SpaceTimeDB login requires interactive browser authentication for cloud deployment
-**Notes**: SpaceTimeDB backend module complete with all core tables and reducers. Module builds successfully.
+**Notes**: Core project structure complete. SpaceTimeDB backend and UE5 client skeleton implemented.
 
 ## Session Log
 - **2026-01-09 15:21**: Initial TODO.md created. Project is fresh with only LICENSE and PROMPT.MD.
@@ -131,7 +131,14 @@
 - **2026-01-09 15:26**: Note: `spacetime login` requires manual browser auth. Proceeding with local dev setup.
 - **2026-01-09 15:30**: Created project directory structure (Server/, Client/, Tests/, etc.)
 - **2026-01-09 15:31**: Created .gitignore for UE5 and SpaceTimeDB artifacts
-- **2026-01-09 15:35**: Implemented complete SpaceTimeDB module with all tables (GameInstance, Player, ItemDefinition, InventoryItem, WorldItem) and reducers
+- **2026-01-09 15:35**: Implemented complete SpaceTimeDB module with all tables and reducers
 - **2026-01-09 15:38**: Fixed reducer return types (SpaceTimeDB reducers can only return () or Result<(), E>)
 - **2026-01-09 15:39**: SpaceTimeDB module builds successfully (`spacetime build`)
 - **2026-01-09 15:40**: Created README.md with project overview and setup instructions
+- **2026-01-09 15:41**: Committed SpaceTimeDB backend module to GitHub
+- **2026-01-09 15:45**: Created UE5.5.4 C++ project structure with Eon module
+- **2026-01-09 15:50**: Implemented AEonCharacter (3rd person controller, camera, combat)
+- **2026-01-09 15:52**: Implemented AEonGameMode and AEonPlayerController
+- **2026-01-09 15:55**: Implemented USpaceTimeDBManager for WebSocket connection to backend
+- **2026-01-09 15:57**: Added UE5 config files (DefaultEngine, DefaultGame, DefaultInput)
+- **2026-01-09 15:58**: Committed UE5 client structure to GitHub
