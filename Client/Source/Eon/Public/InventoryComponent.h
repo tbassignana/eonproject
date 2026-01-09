@@ -97,6 +97,13 @@ public:
     UFUNCTION(BlueprintPure, Category = "Inventory")
     int32 GetItemQuantity(int64 ItemDefId) const;
 
+    // Local inventory management (for single-player/testing)
+    UFUNCTION(BlueprintCallable, Category = "Inventory")
+    void AddItem(int64 ItemDefId, int32 Quantity = 1);
+
+    UFUNCTION(BlueprintCallable, Category = "Inventory")
+    void RemoveItem(int64 ItemDefId, int32 Quantity = 1);
+
     // Inventory actions (these call SpaceTimeDB reducers)
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     void UseItem(int64 ItemId);

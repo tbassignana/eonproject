@@ -80,10 +80,11 @@
   - [x] **5.2.2** Item pickup actors (`AWorldItemPickup`)
   - [ ] **5.2.3** Inventory UI widget - TODO
   - [x] **5.2.4** Item use mechanics (in component)
-- [ ] **5.3** Implement Exploration Features
-  - [ ] **5.3.1** Interactable objects system
-  - [ ] **5.3.2** Simple level/environment
-  - [ ] **5.3.3** Collectibles and pickups
+- [x] **5.3** Implement Exploration Features
+  - [x] **5.3.1** Interactable objects system (IInteractableInterface, UInteractionComponent)
+  - [x] **5.3.2** Interactable door (AInteractableDoor)
+  - [x] **5.3.3** Interactable chest (AInteractableChest)
+  - [ ] **5.3.4** Simple level/environment - TODO
 - [ ] **5.4** Write gameplay tests
 
 ## Phase 6: Testing and Quality Assurance
@@ -122,7 +123,7 @@
 ---
 
 ## Current Status
-**Current Task**: Phase 5.3 - Implement exploration features
+**Current Task**: Phase 5.2.3 - Implement inventory UI widget
 **Blockers**: SpaceTimeDB login requires interactive browser authentication for cloud deployment
 **Notes**: Core systems complete. SpaceTimeDB backend, UE5 client with character controller, inventory, player sync, and instance management UI implemented.
 
@@ -148,3 +149,4 @@
 - **2026-01-09 16:06**: Created LOG.md for session summaries
 - **2026-01-09 16:10**: Implemented UPlayerSyncComponent for multiplayer interpolation
 - **2026-01-09 16:25**: Implemented instance management UI (UInstanceBrowserWidget, UCreateInstanceDialog, UPlayerListWidget, AEonHUD)
+- **2026-01-09 16:40**: Implemented interactable system (IInteractableInterface, UInteractionComponent, AInteractableDoor, AInteractableChest)

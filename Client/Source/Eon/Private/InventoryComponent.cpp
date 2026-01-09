@@ -57,6 +57,75 @@ int32 UInventoryComponent::GetItemQuantity(int64 ItemDefId) const
     return 0;
 }
 
+void UInventoryComponent::AddItem(int64 ItemDefId, int32 Quantity)
+{
+    if (Quantity <= 0)
+    {
+        return;
+    }
+
+    // Check if we already have an item with this definition
+    int32 Index = FindItemIndexByDefId(ItemDefId);
+    if (Index != INDEX_NONE)
+    {
+        // Add to existing stack
+        Items[Index].Quantity += Quantity;
+        OnInventoryUpdated.Broadcast();
+        UE_LOG(LogTemp, Log, TEXT("Added %d to existing item (DefId: %lld), new total: %d"),
+               Quantity, ItemDefId, Items[Index].Quantity);
+    }
+    else
+    {
+        // Create new item
+        FInventoryItem NewItem;
+        NewItem.ItemId = FMath::Rand() * 1000000 + Items.Num(); // Temporary local ID
+        NewItem.ItemDefId = ItemDefId;
+        NewItem.Quantity = Quantity;
+        NewItem.SlotIndex = Items.Num();
+        NewItem.ItemName = FString::Printf(TEXT("Item_%lld"), ItemDefId); // Placeholder name
+
+        Items.Add(NewItem);
+        OnItemAdded.Broadcast(NewItem);
+        OnInventoryUpdated.Broadcast();
+
+        UE_LOG(LogTemp, Log, TEXT("Added new item (DefId: %lld) x%d"), ItemDefId, Quantity);
+    }
+}
+
+void UInventoryComponent::RemoveItem(int64 ItemDefId, int32 Quantity)
+{
+    if (Quantity <= 0)
+    {
+        return;
+    }
+
+    int32 Index = FindItemIndexByDefId(ItemDefId);
+    if (Index == INDEX_NONE)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Cannot remove item - not found (DefId: %lld)"), ItemDefId);
+        return;
+    }
+
+    FInventoryItem& Item = Items[Index];
+    if (Quantity >= Item.Quantity)
+    {
+        // Remove entire stack
+        int64 ItemId = Item.ItemId;
+        Items.RemoveAt(Index);
+        OnItemRemoved.Broadcast(ItemId);
+        UE_LOG(LogTemp, Log, TEXT("Removed entire item stack (DefId: %lld)"), ItemDefId);
+    }
+    else
+    {
+        // Reduce quantity
+        Item.Quantity -= Quantity;
+        UE_LOG(LogTemp, Log, TEXT("Removed %d from item (DefId: %lld), remaining: %d"),
+               Quantity, ItemDefId, Item.Quantity);
+    }
+
+    OnInventoryUpdated.Broadcast();
+}
+
 void UInventoryComponent::UseItem(int64 ItemId)
 {
     int32 Index = FindItemIndex(ItemId);
