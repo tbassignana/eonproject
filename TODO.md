@@ -75,10 +75,10 @@
   - [x] **5.1.1** Basic melee attack (sphere trace)
   - [x] **5.1.2** Health and damage system
   - [ ] **5.1.3** Combat state replication - TODO
-- [x] **5.2** Implement Inventory System (partial)
+- [x] **5.2** Implement Inventory System
   - [x] **5.2.1** `UInventoryComponent` for players
   - [x] **5.2.2** Item pickup actors (`AWorldItemPickup`)
-  - [ ] **5.2.3** Inventory UI widget - TODO
+  - [x] **5.2.3** Inventory UI widget (`UInventoryWidget`)
   - [x] **5.2.4** Item use mechanics (in component)
 - [x] **5.3** Implement Exploration Features
   - [x] **5.3.1** Interactable objects system (IInteractableInterface, UInteractionComponent)
@@ -123,7 +123,7 @@
 ---
 
 ## Current Status
-**Current Task**: Phase 5.2.3 - Implement inventory UI widget
+**Current Task**: Phase 6 - Testing and Quality Assurance
 **Blockers**: SpaceTimeDB login requires interactive browser authentication for cloud deployment
 **Notes**: Core systems complete. SpaceTimeDB backend, UE5 client with character controller, inventory, player sync, and instance management UI implemented.
 
@@ -150,3 +150,4 @@
 - **2026-01-09 16:10**: Implemented UPlayerSyncComponent for multiplayer interpolation
 - **2026-01-09 16:25**: Implemented instance management UI (UInstanceBrowserWidget, UCreateInstanceDialog, UPlayerListWidget, AEonHUD)
 - **2026-01-09 16:40**: Implemented interactable system (IInteractableInterface, UInteractionComponent, AInteractableDoor, AInteractableChest)
+- **2026-01-09 16:50**: Implemented inventory UI widget (UInventoryWidget)
