@@ -34,7 +34,7 @@
   - [x] **2.3.9** `collect_world_item` - Pick up items from world
   - [x] **2.3.10** `spawn_world_item` - Spawn items in world
 - [x] **2.4** Implement `init_item_definitions` reducer for test data
-- [ ] **2.5** Write unit tests for all reducers
+- [x] **2.5** Write integration tests for reducers (Tests/server/test_reducers.sh)
 - [ ] **2.6** Deploy SpaceTimeDB module to cloud (requires login)
 
 ## Phase 3: Unreal Engine Core Systems (C++ Only)
@@ -74,11 +74,11 @@
   - [x] **5.1.1** Basic melee attack (sphere trace)
   - [x] **5.1.2** Health and damage system
   - [ ] **5.1.3** Combat state replication - TODO
-- [ ] **5.2** Implement Inventory System
-  - [ ] **5.2.1** `UInventoryComponent` for players
-  - [ ] **5.2.2** Item pickup actors
-  - [ ] **5.2.3** Inventory UI widget
-  - [ ] **5.2.4** Item use mechanics
+- [x] **5.2** Implement Inventory System (partial)
+  - [x] **5.2.1** `UInventoryComponent` for players
+  - [x] **5.2.2** Item pickup actors (`AWorldItemPickup`)
+  - [ ] **5.2.3** Inventory UI widget - TODO
+  - [x] **5.2.4** Item use mechanics (in component)
 - [ ] **5.3** Implement Exploration Features
   - [ ] **5.3.1** Interactable objects system
   - [ ] **5.3.2** Simple level/environment
@@ -121,9 +121,9 @@
 ---
 
 ## Current Status
-**Current Task**: Phase 3.2.4 - Continue implementing UE5 client features
+**Current Task**: Phase 4.2 - Implement player synchronization
 **Blockers**: SpaceTimeDB login requires interactive browser authentication for cloud deployment
-**Notes**: Core project structure complete. SpaceTimeDB backend and UE5 client skeleton implemented.
+**Notes**: Core project structure complete. SpaceTimeDB backend, UE5 client skeleton, and inventory system implemented. Integration test script created.
 
 ## Session Log
 - **2026-01-09 15:21**: Initial TODO.md created. Project is fresh with only LICENSE and PROMPT.MD.
@@ -142,3 +142,6 @@
 - **2026-01-09 15:55**: Implemented USpaceTimeDBManager for WebSocket connection to backend
 - **2026-01-09 15:57**: Added UE5 config files (DefaultEngine, DefaultGame, DefaultInput)
 - **2026-01-09 15:58**: Committed UE5 client structure to GitHub
+- **2026-01-09 16:02**: Implemented UInventoryComponent and AWorldItemPickup
+- **2026-01-09 16:05**: Created integration test script for SpaceTimeDB reducers
+- **2026-01-09 16:06**: Created LOG.md for session summaries
