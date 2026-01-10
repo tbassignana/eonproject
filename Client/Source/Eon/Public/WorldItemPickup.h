@@ -27,7 +27,7 @@ public:
 	virtual EInteractableType GetInteractableType() const override { return EInteractableType::Pickup; }
 
 	UFUNCTION(BlueprintCallable, Category = "Pickup")
-	void Initialize(int64 InWorldItemId, const FString& InItemId, int32 InQuantity);
+	void Initialize(int64 InWorldItemId, const FString& InItemId, int32 InQuantity, const FString& InDisplayName = TEXT(""));
 
 	UFUNCTION(BlueprintCallable, Category = "Pickup")
 	FString GetItemId() const { return ItemId; }

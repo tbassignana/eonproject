@@ -4,9 +4,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "InputActionValue.h"
+#include "Components/InputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "InventoryComponent.h"
 #include "PlayerSyncComponent.h"
 #include "InteractionComponent.h"
@@ -14,6 +13,22 @@
 AEonCharacter::AEonCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Try to load UE5 Mannequin mesh
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MannequinMesh(
+		TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny"));
+	if (MannequinMesh.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(MannequinMesh.Object);
+		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+		GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	}
+	else
+	{
+		// Fallback: Make capsule visible for debugging
+		GetCapsuleComponent()->SetVisibility(true);
+		GetCapsuleComponent()->SetHiddenInGame(false);
+	}
 
 	// Setup camera boom
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -50,21 +65,6 @@ AEonCharacter::AEonCharacter()
 void AEonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Setup enhanced input
-	if (APlayerController* PC = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
-		{
-			if (DefaultMappingContext)
-			{
-				Subsystem->AddMappingContext(DefaultMappingContext, 0);
-			}
-		}
-	}
-
-	ConfigureMobileInput();
 }
 
 void AEonCharacter::Tick(float DeltaTime)
@@ -76,67 +76,53 @@ void AEonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	// Movement bindings
+	PlayerInputComponent->BindAxis("MoveForward", this, &AEonCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AEonCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("Turn", this, &AEonCharacter::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &AEonCharacter::LookUp);
+
+	// Action bindings
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AEonCharacter::StartJump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AEonCharacter::StopJump);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AEonCharacter::Attack);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AEonCharacter::Interact);
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &AEonCharacter::ToggleInventory);
+}
+
+void AEonCharacter::MoveForward(float Value)
+{
+	if (IsDead() || Value == 0.0f) return;
+
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(Direction, Value);
+}
+
+void AEonCharacter::MoveRight(float Value)
+{
+	if (IsDead() || Value == 0.0f) return;
+
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Direction, Value);
+}
+
+void AEonCharacter::Turn(float Value)
+{
+	if (Value != 0.0f)
 	{
-		if (MoveAction)
-		{
-			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEonCharacter::Move);
-		}
-		if (LookAction)
-		{
-			EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEonCharacter::Look);
-		}
-		if (JumpAction)
-		{
-			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Started, this, &AEonCharacter::StartJump);
-			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Completed, this, &AEonCharacter::StopJump);
-		}
-		if (AttackAction)
-		{
-			EnhancedInput->BindAction(AttackAction, ETriggerEvent::Started, this, &AEonCharacter::Attack);
-		}
-		if (InteractAction)
-		{
-			EnhancedInput->BindAction(InteractAction, ETriggerEvent::Started, this, &AEonCharacter::Interact);
-		}
-		if (InventoryAction)
-		{
-			EnhancedInput->BindAction(InventoryAction, ETriggerEvent::Started, this, &AEonCharacter::ToggleInventory);
-		}
+		AddControllerYawInput(Value);
 	}
 }
 
-void AEonCharacter::Move(const FInputActionValue& Value)
+void AEonCharacter::LookUp(float Value)
 {
-	if (IsDead()) return;
-
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller)
+	if (Value != 0.0f)
 	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
-}
-
-void AEonCharacter::Look(const FInputActionValue& Value)
-{
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-#if PLATFORM_IOS
-	LookAxisVector *= TouchSensitivity;
-#endif
-
-	if (Controller)
-	{
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerPitchInput(Value);
 	}
 }
 
@@ -156,9 +142,6 @@ void AEonCharacter::StopJump()
 void AEonCharacter::Attack()
 {
 	if (IsDead()) return;
-
-	// Basic attack implementation
-	// This would trigger combat animations and damage calculations
 	UE_LOG(LogTemp, Log, TEXT("EonCharacter: Attack triggered"));
 }
 
@@ -174,7 +157,6 @@ void AEonCharacter::Interact()
 
 void AEonCharacter::ToggleInventory()
 {
-	// This will be handled by the UI system
 	UE_LOG(LogTemp, Log, TEXT("EonCharacter: Toggle inventory"));
 }
 
@@ -184,12 +166,11 @@ void AEonCharacter::SetHealth(float NewHealth)
 
 	if (Health <= 0.0f)
 	{
-		// Handle death
 		UE_LOG(LogTemp, Warning, TEXT("EonCharacter: Player died"));
 	}
 }
 
-void AEonCharacter::TakeDamage(float DamageAmount)
+void AEonCharacter::ApplyDamage(float DamageAmount)
 {
 	SetHealth(Health - DamageAmount);
 }
@@ -203,19 +184,4 @@ void AEonCharacter::SetupCamera()
 {
 	CameraBoom->TargetArmLength = CameraBoomLength;
 	CameraBoom->SocketOffset.Z = CameraBoomHeightOffset;
-}
-
-void AEonCharacter::ConfigureMobileInput()
-{
-#if PLATFORM_IOS
-	if (bEnableTouchInput)
-	{
-		// Enable touch interface for iOS
-		if (APlayerController* PC = Cast<APlayerController>(Controller))
-		{
-			PC->bShowMouseCursor = false;
-			PC->SetVirtualJoystickVisibility(true);
-		}
-	}
-#endif
 }

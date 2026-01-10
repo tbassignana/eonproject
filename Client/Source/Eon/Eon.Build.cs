@@ -13,7 +13,6 @@ public class Eon : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"InputCore",
-			"EnhancedInput",
 			"UMG",
 			"Slate",
 			"SlateCore",
@@ -23,11 +22,12 @@ public class Eon : ModuleRules
 			"WebSockets"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {
-			"GameplayAbilities",
-			"GameplayTags",
-			"GameplayTasks"
-		});
+		// Optional gameplay framework modules (uncomment if using GAS)
+		// PrivateDependencyModuleNames.AddRange(new string[] {
+		// 	"GameplayAbilities",
+		// 	"GameplayTags",
+		// 	"GameplayTasks"
+		// });
 
 		// iOS specific settings
 		if (Target.Platform == UnrealTargetPlatform.IOS)

@@ -11,9 +11,6 @@ class UCameraComponent;
 class UInventoryComponent;
 class UPlayerSyncComponent;
 class UInteractionComponent;
-class UInputMappingContext;
-class UInputAction;
-struct FInputActionValue;
 
 UCLASS()
 class EON_API AEonCharacter : public ACharacter
@@ -36,7 +33,7 @@ public:
 	void SetHealth(float NewHealth);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
-	void TakeDamage(float DamageAmount);
+	void ApplyDamage(float DamageAmount);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	void Heal(float HealAmount);
@@ -63,36 +60,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	// Input Actions
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
+	// Legacy Input Functions
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void Turn(float Value);
+	void LookUp(float Value);
 	void StartJump();
 	void StopJump();
 	void Attack();
 	void Interact();
 	void ToggleInventory();
-
-	// Enhanced Input
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* MoveAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* LookAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* JumpAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* AttackAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* InteractAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* InventoryAction;
 
 	// Character Stats
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
@@ -108,14 +85,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Camera")
 	float CameraBoomHeightOffset = 60.0f;
 
-	// Mobile touch support
-	UPROPERTY(EditDefaultsOnly, Category = "Mobile")
-	bool bEnableTouchInput = true;
+	// Movement
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float BaseTurnRate = 45.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Mobile")
-	float TouchSensitivity = 1.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float BaseLookUpRate = 45.0f;
 
 private:
 	void SetupCamera();
-	void ConfigureMobileInput();
 };

@@ -22,6 +22,7 @@ void UPlayerSyncComponent::BeginPlay()
 	{
 		if (USpaceTimeDBManager* Manager = PC->GetSpaceTimeDBManager())
 		{
+			// Bind to player data updates (will receive data once connected)
 			Manager->OnPlayerDataReceived.AddDynamic(this, &UPlayerSyncComponent::OnPlayerDataReceived);
 		}
 	}

@@ -11,17 +11,5 @@ public class EonTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
 		ExtraModuleNames.Add("Eon");
-
-		// Apple Silicon and iOS optimizations
-		if (Target.Platform == UnrealTargetPlatform.Mac)
-		{
-			bCompileForSize = false;
-			bEnableLTO = true;
-		}
-		else if (Target.Platform == UnrealTargetPlatform.IOS)
-		{
-			bCompileForSize = true;
-			bEnableLTO = true;
-		}
 	}
 }

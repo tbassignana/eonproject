@@ -4,7 +4,7 @@
 #include "InteractableInterface.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
-#include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UInteractionComponent::UInteractionComponent()
 {
@@ -32,7 +32,6 @@ void UInteractionComponent::TryInteract()
 {
 	if (!CurrentInteractable) return;
 
-	// Check if the actor implements the interactable interface
 	if (CurrentInteractable->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
 	{
 		IInteractableInterface* Interactable = Cast<IInteractableInterface>(CurrentInteractable);
@@ -68,7 +67,6 @@ void UInteractionComponent::ScanForInteractables()
 	{
 		if (CurrentInteractable && !NewInteractable)
 		{
-			// Lost interactable
 			if (CurrentInteractable->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
 			{
 				if (IInteractableInterface* Interactable = Cast<IInteractableInterface>(CurrentInteractable))
@@ -80,7 +78,6 @@ void UInteractionComponent::ScanForInteractables()
 		}
 		else if (NewInteractable)
 		{
-			// Found new interactable
 			if (NewInteractable->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
 			{
 				if (IInteractableInterface* Interactable = Cast<IInteractableInterface>(NewInteractable))
@@ -106,31 +103,34 @@ AActor* UInteractionComponent::FindBestInteractable() const
 	FVector OwnerLocation = Owner->GetActorLocation();
 	FVector OwnerForward = Owner->GetActorForwardVector();
 
-	// Sphere overlap for nearby interactables
-	TArray<FOverlapResult> Overlaps;
-	FCollisionShape SphereShape = FCollisionShape::MakeSphere(InteractionRange);
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(Owner);
+	// Use sphere trace to find nearby actors
+	TArray<AActor*> IgnoredActors;
+	IgnoredActors.Add(Owner);
 
-	World->OverlapMultiByChannel(
-		Overlaps,
+	TArray<FHitResult> HitResults;
+	bool bHit = UKismetSystemLibrary::SphereTraceMulti(
+		World,
 		OwnerLocation,
-		FQuat::Identity,
-		InteractionChannel,
-		SphereShape,
-		QueryParams
+		OwnerLocation + FVector(0, 0, 1), // Minimal trace distance
+		InteractionRange,
+		UEngineTypes::ConvertToTraceType(InteractionChannel),
+		false,
+		IgnoredActors,
+		EDrawDebugTrace::None,
+		HitResults,
+		true
 	);
 
-	// Find the best candidate (closest in front of player)
+	if (!bHit) return nullptr;
+
 	AActor* BestCandidate = nullptr;
 	float BestScore = -1.0f;
 
-	for (const FOverlapResult& Overlap : Overlaps)
+	for (const FHitResult& Hit : HitResults)
 	{
-		AActor* Actor = Overlap.GetActor();
+		AActor* Actor = Hit.GetActor();
 		if (!Actor) continue;
 
-		// Must implement interactable interface
 		if (!Actor->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
 		{
 			continue;
@@ -142,7 +142,6 @@ AActor* UInteractionComponent::FindBestInteractable() const
 			continue;
 		}
 
-		// Calculate score based on distance and facing direction
 		FVector ToActor = Actor->GetActorLocation() - OwnerLocation;
 		float Distance = ToActor.Size();
 		ToActor.Normalize();

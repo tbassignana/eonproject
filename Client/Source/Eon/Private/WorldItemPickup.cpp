@@ -14,10 +14,25 @@ AWorldItemPickup::AWorldItemPickup()
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
 	RootComponent = ItemMesh;
 
-	// Disable collision for visual-only pickup
+	// Load default cube mesh
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube"));
+	if (CubeMesh.Succeeded())
+	{
+		ItemMesh->SetStaticMesh(CubeMesh.Object);
+		ItemMesh->SetWorldScale3D(FVector(0.3f)); // Scale down
+	}
+
+	// Set default material color
+	static ConstructorHelpers::FObjectFinder<UMaterial> DefaultMat(TEXT("/Engine/BasicShapes/BasicShapeMaterial"));
+	if (DefaultMat.Succeeded())
+	{
+		ItemMesh->SetMaterial(0, DefaultMat.Object);
+	}
+
+	// Enable collision for interaction traces
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	ItemMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
-	ItemMesh->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap); // Interaction channel
+	ItemMesh->SetCollisionResponseToAllChannels(ECR_Overlap);
+	ItemMesh->SetCollisionObjectType(ECC_WorldDynamic);
 }
 
 void AWorldItemPickup::BeginPlay()
@@ -68,14 +83,12 @@ FString AWorldItemPickup::GetInteractionPrompt() const
 	return FString::Printf(TEXT("Pick up %s"), *DisplayName);
 }
 
-void AWorldItemPickup::Initialize(int64 InWorldItemId, const FString& InItemId, int32 InQuantity)
+void AWorldItemPickup::Initialize(int64 InWorldItemId, const FString& InItemId, int32 InQuantity, const FString& InDisplayName)
 {
 	WorldItemId = InWorldItemId;
 	ItemId = InItemId;
 	Quantity = InQuantity;
-
-	// Would load item definition to get display name, mesh, etc.
-	DisplayName = ItemId; // Placeholder
+	DisplayName = InDisplayName.IsEmpty() ? ItemId : InDisplayName;
 }
 
 void AWorldItemPickup::UpdateAnimation(float DeltaTime)

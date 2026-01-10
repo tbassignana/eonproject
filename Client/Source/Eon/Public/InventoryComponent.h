@@ -76,6 +76,7 @@ public:
 	int32 GetMaxSlots() const { return MaxSlots; }
 
 	// Called when server updates inventory data
+	UFUNCTION()
 	void OnInventoryDataReceived(const FString& JsonData);
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
@@ -89,5 +90,9 @@ private:
 	UPROPERTY()
 	TArray<FInventorySlot> Items;
 
+	int64 NextLocalEntryId = 1; // For local-only mode
+
 	void RefreshFromServer();
+	void AddItemLocal(const FString& ItemId, int32 Quantity);
+	void RemoveItemLocal(int64 EntryId, int32 Quantity);
 };

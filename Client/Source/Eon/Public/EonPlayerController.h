@@ -32,8 +32,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ShowCreateInstanceDialog();
 
+	// Debug Commands
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug")
+	void SpawnTestItem(const FString& ItemId = TEXT("health_potion"), int32 Quantity = 1);
+
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug")
+	void GiveItem(const FString& ItemId, int32 Quantity = 1);
+
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug")
+	void ListInventory();
+
 protected:
 	virtual void SetupInputComponent() override;
+
+	// SpaceTimeDB settings
+	UPROPERTY(EditDefaultsOnly, Category = "SpaceTimeDB")
+	bool bEnableSpaceTimeDB = true; // Server deployed to maincloud.spacetimedb.com/eon
 
 	// Position sync settings
 	UPROPERTY(EditDefaultsOnly, Category = "Sync")
@@ -45,6 +59,9 @@ protected:
 private:
 	void SyncPlayerPosition();
 	void DetectPlatform();
+
+	UFUNCTION()
+	void OnSpaceTimeDBConnected();
 
 	float LastSyncTime = 0.0f;
 
