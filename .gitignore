@@ -1,0 +1,51 @@
+# Unreal Engine
+Client/Binaries/
+Client/Build/
+Client/DerivedDataCache/
+Client/Intermediate/
+Client/Saved/
+Client/*.xcworkspace/
+Client/*.xcodeproj/
+Client/.vs/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Xcode
+*.xcuserdata
+*.xcscmblueprint
+*.xccheckout
+
+# Rust/Cargo
+Server/eonserver/target/
+Server/eonserver/Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+*.o
+*.obj
+*.dylib
+*.so
+*.dll
+*.a
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
