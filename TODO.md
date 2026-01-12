@@ -54,12 +54,35 @@
 - [x] 7.4 Final integration test suite
 - [x] 7.5 Update documentation with final build instructions
 
+## Phase 8: Advanced Inventory System
+- [x] 8.1 Implement item weight system with carry capacity limits
+- [x] 8.2 Add item category/type filtering for organized viewing
+- [x] 8.3 Implement inventory sorting (by name, type, quantity, rarity, weight)
+- [x] 8.4 Add stack splitting functionality
+- [x] 8.5 Implement manual stack combining
+- [x] 8.6 Add quick slots/hotbar system (6 slots)
+- [x] 8.7 Implement detailed item tooltips with stats
+- [x] 8.8 Add item rarity system (Common, Uncommon, Rare, Epic, Legendary)
+- [x] 8.9 Implement item durability system for equipment
+- [x] 8.10 Add auto-sort functionality
+- [x] 8.11 Implement search/filter by item name
+- [x] 8.12 Add equipment slots (weapon, armor, accessory)
+- [x] 8.13 Implement item comparison system
+- [x] 8.14 Add bulk add/remove operations
+- [x] 8.15 Implement local inventory persistence (save/load)
+- [x] 8.16 Add overflow handling with notification
+- [x] 8.17 Implement item validation system
+- [x] 8.18 Add transaction logging for debugging
+- [x] 8.19 Implement capacity expansion system (upgradeable inventory)
+- [x] 8.20 Add favorites/item marking and item locking
+
 ## Completion Criteria
 - [x] All phases completed
 - [x] All tests passing
 - [x] Game playable on Apple Silicon Mac and iOS 15+
 - [x] Single-player and multiplayer modes functional
 - [x] Inventory system working with SpaceTimeDB persistence
+- [x] Phase 8 inventory improvements implemented and tested
 
 ---
 **Status: COMPLETE**
@@ -70,3 +93,4 @@ All development phases finished. The project includes:
 - Complete test suite (integration, unit, performance)
 - Build scripts for Mac and iOS
 - Comprehensive documentation
+- Advanced inventory system with 20 improvements (Phase 8)
