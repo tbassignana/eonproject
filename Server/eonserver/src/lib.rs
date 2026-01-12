@@ -55,6 +55,7 @@ pub struct ItemDefinition {
 // ============================================================================
 
 /// Tracks player's premium currency balance
+#[derive(Clone)]
 #[table(name = player_wallet, public)]
 pub struct PlayerWallet {
     #[primary_key]
