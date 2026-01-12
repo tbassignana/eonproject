@@ -59,6 +59,10 @@ if [ -f "$TESTS_DIR/integration/test_inventory_operations.sh" ]; then
     run_test "$TESTS_DIR/integration/test_inventory_operations.sh" "Inventory Operations"
 fi
 
+if [ -f "$TESTS_DIR/integration/test_premium_system.sh" ]; then
+    run_test "$TESTS_DIR/integration/test_premium_system.sh" "Premium System (Phase 9)"
+fi
+
 # Run Performance Tests
 echo ""
 echo "========== PERFORMANCE TESTS =========="

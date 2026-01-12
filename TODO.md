@@ -76,21 +76,43 @@
 - [x] 8.19 Implement capacity expansion system (upgradeable inventory)
 - [x] 8.20 Add favorites/item marking and item locking
 
+## Phase 9: Premium/Cash Shop System
+- [x] 9.1 Design premium item architecture (server-authoritative ownership)
+- [x] 9.2 Add premium fields to ItemDefinition (is_premium, price, is_exclusive, rarity)
+- [x] 9.3 Create PlayerWallet table for premium currency tracking
+- [x] 9.4 Create PremiumOwnership table for permanent item ownership records
+- [x] 9.5 Create PremiumTransaction table for audit logging
+- [x] 9.6 Implement add_premium_currency reducer (post-IAP verification)
+- [x] 9.7 Implement purchase_premium_item reducer with validation
+- [x] 9.8 Implement gift_premium_item reducer for player-to-player gifting
+- [x] 9.9 Implement reclaim_premium_items reducer (restore after reinstall)
+- [x] 9.10 Implement admin_grant_premium_item reducer for support/promotions
+- [x] 9.11 Add 14 example premium items (weapons, armor, accessories, mounts, consumables, bundles)
+- [ ] 9.12 Write integration tests for premium system
+- [ ] 9.13 Add premium shop UI components (Client-side)
+- [ ] 9.14 Implement IAP integration layer (platform-specific)
+
 ## Completion Criteria
-- [x] All phases completed
+- [x] All phases completed (Phases 1-8)
 - [x] All tests passing
 - [x] Game playable on Apple Silicon Mac and iOS 15+
 - [x] Single-player and multiplayer modes functional
 - [x] Inventory system working with SpaceTimeDB persistence
 - [x] Phase 8 inventory improvements implemented and tested
+- [ ] Phase 9 premium system backend complete
 
 ---
-**Status: COMPLETE**
+**Status: IN PROGRESS (Phase 9)**
 
-All development phases finished. The project includes:
+Phases 1-8 complete. Phase 9 (Premium System) backend implementation finished:
 - SpaceTimeDB backend deployed to maincloud.spacetimedb.com/eon
 - Full UE5 C++ client with 3rd person gameplay
 - Complete test suite (integration, unit, performance)
 - Build scripts for Mac and iOS
 - Comprehensive documentation
 - Advanced inventory system with 20 improvements (Phase 8)
+- Premium/Cash Shop backend with server-authoritative ownership (Phase 9)
+  - 14 premium items (legendary weapons, armor sets, mounts, companions, bundles)
+  - Wallet, ownership, and transaction tracking
+  - Item reclamation after client reinstall
+  - Gifting system between players
